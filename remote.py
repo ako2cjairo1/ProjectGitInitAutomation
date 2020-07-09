@@ -1,29 +1,20 @@
 import sys
 import os
 from github import Github
+from helper import create_proj_folder, create_venv
 
 param = sys.argv
 lang = str(param[1])
 foldername = str(param[2])
-
 # add projects dirctory to the env vars
 project_path = os.environ.get("DevPath")
 
 # add github token to the env vars
 git_login_token = os.environ.get("GitToken")
-new_project_dir = f"{project_path}/{lang}/{foldername}"
+new_project_dir = create_proj_folder(project_path, lang, foldername)
 
 try:
-    # creating lang folder if not existing
-    if not os.path.isdir(f"{project_path}/{lang}"):
-        os.mkdir(f"{project_path}/{lang}")
-
-    print("\nCreating virtual environment...\n")
-    os.chdir(f"{project_path}/{lang}")
-    os.system(f"virtualenv {foldername}")
-    os.chdir(new_project_dir)
-    print(f"\nThe new project folder: {foldername} has been created.")
-    print(f"Local: {new_project_dir}\n")
+    create_venv(new_project_dir, project_path, lang, foldername)
 
     # create folder/file patter that will be ignore by git
     with open(".gitignore", "w") as ignore_file:

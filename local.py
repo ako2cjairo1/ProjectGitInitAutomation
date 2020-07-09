@@ -1,21 +1,14 @@
 import sys
 import os
+from helper import create_proj_folder, create_venv
 
 param = sys.argv
 project_path = os.environ.get("DevPath")
 lang = str(param[1])
 foldername = str(param[2])
-new_project_dir = f"{project_path}/{lang}/{foldername}"
+new_project_dir = create_proj_folder(project_path, lang, foldername)
 
 try:
-    if not os.path.isdir(f"{project_path}/{lang}"):
-        os.mkdir(f"{project_path}/{lang}")
-
-    print("\nCreating virtual environment...\n")
-    os.chdir(f"{project_path}/{lang}")
-    os.system(f"virtualenv {foldername}")
-    os.chdir(new_project_dir)
-
     # create folder/file patter that will be ignore by git
     with open(".gitignore", "w") as ignore_file:
         ignore_file.write("Lib/*\nScripts/*\n.gitignore\n*.cfg")
